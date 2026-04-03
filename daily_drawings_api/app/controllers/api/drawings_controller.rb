@@ -15,7 +15,9 @@ class Api::DrawingsController < ApplicationController
 
   def update
     drawing = Drawing.find(params[:id])
-    if drawing.update(drawing_params)
+    drawing.assign_attributes(drawing_params.except(:image))
+    drawing.image.attach(params[:image]) if params[:image].present?
+    if drawing.save
       render json: drawing_json(drawing)
     else
       render json: { errors: drawing.errors.full_messages }, status: :unprocessable_entity
