@@ -14,6 +14,13 @@ function App() {
   const [artists, setArtists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const errorTimerRef = useRef(null);
+
+  function showError(msg) {
+    setError(msg);
+    clearTimeout(errorTimerRef.current);
+    errorTimerRef.current = setTimeout(() => setError(""), 4000);
+  }
 
   const [imageSrc, setImageSrc] = useState("");
   const [croppedPreview, setCroppedPreview] = useState("");
@@ -41,7 +48,7 @@ function App() {
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.message);
+        showError(err.message);
         setLoading(false);
       });
   }, []);
@@ -62,7 +69,7 @@ function App() {
       setImageSrc("");
     } catch (err) {
       console.error(err);
-      setError(err.message);
+      showError(err.message);
     }
   }
 
@@ -90,7 +97,7 @@ function App() {
       const newDrawing = await response.json();
       setDrawings((prev) => [newDrawing, ...prev]);
     } catch (err) {
-      setError(err.message);
+      showError(err.message);
     } finally {
       setCroppedBlob(null);
       setCroppedPreview("");
@@ -126,7 +133,7 @@ function App() {
       const updated = await response.json();
       setDrawings((prev) => prev.map((d) => d.id === updated.id ? updated : d));
     } catch (err) {
-      setError(err.message);
+      showError(err.message);
     } finally {
       setDrawingToEdit(null);
     }
@@ -140,7 +147,7 @@ function App() {
       if (!response.ok) throw new Error("Failed to delete drawing");
       setDrawings((prev) => prev.filter((d) => d.id !== drawingToDelete.id));
     } catch (err) {
-      setError(err.message);
+      showError(err.message);
     } finally {
       setDrawingToDelete(null);
     }
@@ -159,7 +166,7 @@ function App() {
       const artist = await response.json();
       setArtists((prev) => [...prev, artist]);
     } catch (err) {
-      setError(err.message);
+      showError(err.message);
     } finally {
       setNewArtistName("");
       setShowNewArtistInput(false);
@@ -175,7 +182,7 @@ function App() {
       setArtists((prev) => prev.filter((a) => a.id !== artistToDelete.id));
       setDrawings((prev) => prev.filter((d) => d.artist_id !== artistToDelete.id));
     } catch (err) {
-      setError(err.message);
+      showError(err.message);
     } finally {
       setArtistToDelete(null);
     }
