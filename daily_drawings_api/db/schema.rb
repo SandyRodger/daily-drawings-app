@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_21_160153) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_03_150001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_21_160153) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "artists", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "drawings", force: :cascade do |t|
     t.string "title"
     t.date "date"
@@ -50,6 +56,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_21_160153) do
     t.string "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "artist_id"
+    t.index ["artist_id"], name: "index_drawings_on_artist_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

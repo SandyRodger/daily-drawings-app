@@ -163,10 +163,15 @@ function App() {
   }
 
   if (loading) return <p>Loading drawings...</p>;
-  if (error) return <p>Error: {error}</p>
 
   return (
     <main className="app">
+      {error && (
+        <div className="error-banner">
+          <span>{error}</span>
+          <button onClick={() => setError("")}>✕</button>
+        </div>
+      )}
       <h1>Daily Drawings</h1>
 
       <UploadCard onFileSelect={handleFileSelect} />
@@ -189,6 +194,7 @@ function App() {
       {drawingToEdit && (
         <EditModal
           drawing={drawingToEdit}
+          artists={artists}
           onCancel={() => setDrawingToEdit(null)}
           onSave={handleSaveEdit}
         />
