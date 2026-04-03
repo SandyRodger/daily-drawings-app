@@ -96,13 +96,24 @@ function App() {
     setCroppedPreview("");
   }
 
-  async function handleSaveEdit(fields) {
+  async function handleSaveEdit(fields, imageBlob) {
     try {
-      const response = await fetch(`${API_URL}/api/drawings/${drawingToEdit.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(fields),
-      });
+      let response;
+      if (imageBlob) {
+        const formData = new FormData();
+        Object.entries(fields).forEach(([k, v]) => { if (v != null) formData.append(k, v); });
+        formData.append("image", imageBlob, "cropped-drawing.jpg");
+        response = await fetch(`${API_URL}/api/drawings/${drawingToEdit.id}`, {
+          method: "PATCH",
+          body: formData,
+        });
+      } else {
+        response = await fetch(`${API_URL}/api/drawings/${drawingToEdit.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(fields),
+        });
+      }
       if (!response.ok) throw new Error("Failed to update drawing");
       const updated = await response.json();
       setDrawings((prev) => prev.map((d) => d.id === updated.id ? updated : d));
