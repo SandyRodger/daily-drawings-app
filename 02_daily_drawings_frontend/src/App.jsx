@@ -18,6 +18,7 @@ function App() {
   const [croppedPreview, setCroppedPreview] = useState("");
   const [croppedBlob, setCroppedBlob] = useState(null);
 
+  const [lightboxDrawing, setLightboxDrawing] = useState(null);
   const [drawingToDelete, setDrawingToDelete] = useState(null);
   const [drawingToEdit, setDrawingToEdit] = useState(null);
   const [artistToDelete, setArtistToDelete] = useState(null);
@@ -227,6 +228,17 @@ function App() {
         />
       )}
 
+      {lightboxDrawing && (
+        <div className="modal-overlay lightbox-overlay" onClick={() => setLightboxDrawing(null)}>
+          <img
+            src={lightboxDrawing.image_url}
+            alt={lightboxDrawing.title}
+            className="lightbox-image"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+
       {drawingToDelete && (
         <div className="modal-overlay">
           <div className="confirm-modal">
@@ -287,41 +299,42 @@ function App() {
         const sortedDates = [...new Set(drawings.map((d) => d.date).filter(Boolean))].sort().reverse();
         return (
           <>
+          <div className="mobile-artist-label">{artists[mobileFeedIndex]?.name}</div>
           <div
-            className="mobile-feeds"
+            className="mobile-grid-outer"
             ref={mobileFeedsRef}
             onScroll={handleMobileScroll}
           >
-            {artists.map((artist) => {
-              const artistDrawings = drawings
-                .filter((d) => d.artist_id === artist.id)
-                .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
-              return (
-                <div key={artist.id} className="mobile-feed">
-                  <h2 className="mobile-feed-title">{artist.name}</h2>
-                  {artistDrawings.length === 0 ? (
-                    <p className="empty-column">No drawings yet.</p>
-                  ) : (
-                    artistDrawings.map((drawing) => (
-                      <article key={drawing.id} className="drawing-card">
-                        {drawing.image_url && (
-                          <img src={drawing.image_url} alt={drawing.title} className="drawing-image" />
-                        )}
-                        <div className="drawing-content">
-                          <h2>{drawing.title}</h2>
-                          {drawing.date && <p className="drawing-date">{drawing.date}</p>}
-                          <p>{drawing.caption}</p>
-                          <div className="card-actions">
-                            <button type="button" className="edit-button" onClick={() => setDrawingToEdit(drawing)}>Edit</button>
-                            <button type="button" className="delete-button" onClick={() => setDrawingToDelete(drawing)}>Delete</button>
+            {sortedDates.map((date) => (
+              <div key={date} className="mobile-grid-row">
+                {artists.map((artist) => {
+                  const drawing = drawings.find(
+                    (d) => d.artist_id === artist.id && d.date === date
+                  );
+                  return (
+                    <div key={artist.id} className="mobile-grid-cell">
+                      {drawing ? (
+                        <article className="drawing-card">
+                          {drawing.image_url && (
+                            <img src={drawing.image_url} alt={drawing.title} className="drawing-image" />
+                          )}
+                          <div className="drawing-content">
+                            <h2>{drawing.title}</h2>
+                            <p>{drawing.caption}</p>
+                            <div className="card-actions">
+                              <button type="button" className="edit-button" onClick={() => setDrawingToEdit(drawing)}>Edit</button>
+                              <button type="button" className="delete-button" onClick={() => setDrawingToDelete(drawing)}>Delete</button>
+                            </div>
                           </div>
-                        </div>
-                      </article>
-                    ))
-                  )}
-                </div>
-              );
-            })}
+                        </article>
+                      ) : (
+                        <div className="mobile-empty-cell" />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
           </div>
           {artists.length > 1 && (
             <div className="mobile-dots">
@@ -361,7 +374,8 @@ function App() {
                               <img
                                 src={drawing.image_url}
                                 alt={drawing.title}
-                                className="drawing-image"
+                                className="drawing-image drawing-image--zoomable"
+                                onDoubleClick={() => setLightboxDrawing(drawing)}
                               />
                             )}
                             <div className="drawing-content">

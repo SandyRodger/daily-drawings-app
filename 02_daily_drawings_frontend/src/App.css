@@ -420,6 +420,23 @@ h1 {
   color: white;
 }
 
+.drawing-image--zoomable {
+  cursor: zoom-in;
+}
+
+.lightbox-overlay {
+  cursor: zoom-out;
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.lightbox-image {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
 .drawing-date {
   font-size: 0.8rem;
   color: #aaa;
@@ -427,6 +444,14 @@ h1 {
 }
 
 .mobile-feeds {
+  display: none;
+}
+
+.mobile-grid-outer {
+  display: none;
+}
+
+.mobile-artist-label {
   display: none;
 }
 
@@ -456,62 +481,66 @@ h1 {
     display: none;
   }
 
-  .mobile-feeds {
-    display: flex;
+  .mobile-artist-label {
+    display: block;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    padding: 0.5rem 0 0.25rem;
+  }
+
+  .mobile-grid-outer {
+    display: block;
     overflow-x: scroll;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     width: 100%;
-    gap: 0;
   }
 
-  .mobile-feeds::-webkit-scrollbar {
+  .mobile-grid-outer::-webkit-scrollbar {
     display: none;
   }
 
-  .mobile-feed {
-    flex: 0 0 100%;
-    width: 100%;
+  .mobile-grid-row {
+    display: flex;
+  }
+
+  .mobile-grid-cell {
+    width: 100vw;
+    flex-shrink: 0;
     scroll-snap-align: start;
-    box-sizing: border-box;
   }
 
-  .mobile-feed-title {
-    text-align: center;
-    font-size: 1.2rem;
-    margin: 0 0 0.75rem;
-    color: #333;
-    padding: 0 1rem;
+  .mobile-empty-cell {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #f0ece6;
   }
 
-  .mobile-feed .drawing-card {
+  .mobile-grid-cell .drawing-card {
     border-radius: 0;
     box-shadow: none;
     border-bottom: 1px solid #e8e2da;
-    position: relative;
   }
 
-  .mobile-feed .drawing-image {
+  .mobile-grid-cell .drawing-image {
     width: 100%;
     display: block;
   }
 
-  .mobile-feed .drawing-content {
+  .mobile-grid-cell .drawing-content {
     padding: 0.5rem 1rem;
   }
 
-  .mobile-feed .drawing-content h2 {
+  .mobile-grid-cell .drawing-content h2 {
     font-size: 0.95rem;
     margin: 0 0 0.2rem;
   }
 
-  .mobile-feed .drawing-content p {
+  .mobile-grid-cell .drawing-content p {
     font-size: 0.85rem;
     margin: 0;
-  }
-
-  .mobile-feed .drawing-date {
-    display: none;
   }
 
   .mobile-dots {
