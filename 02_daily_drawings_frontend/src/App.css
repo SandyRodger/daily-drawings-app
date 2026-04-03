@@ -564,11 +564,13 @@ h1 {
   .mobile-grid-cell .drawing-content h2 {
     font-size: 0.95rem;
     margin: 0 0 0.2rem;
+    color: #111;
   }
 
   .mobile-grid-cell .drawing-content p {
     font-size: 0.85rem;
     margin: 0;
+    color: #111;
   }
 
   .mobile-dots {
