@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-function UploadDetailsModal({ previewUrl, artists, onCancel, onSubmit }) {
+function UploadDetailsModal({ previewUrl, artists, onCancel, onSubmit, defaultArtistId, defaultDate }) {
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(defaultDate || new Date().toISOString().slice(0, 10));
   const [notes, setNotes] = useState("");
-  const [artistId, setArtistId] = useState(artists[0]?.id ?? "");
+  const [artistId, setArtistId] = useState(defaultArtistId ?? artists[0]?.id ?? "");
 
   function handleSubmit(e) {
     e.preventDefault();

@@ -3,6 +3,7 @@ import "./App.css"
 
 const API_URL = import.meta.env.VITE_API_URL;
 import UploadCard from "./components/UploadCard";
+import CellUploadCard from "./components/CellUploadCard";
 import CropModal from "./components/CropModal";
 import EditModal from "./components/EditModal";
 import UploadDetailsModal from "./components/UploadDetailsModal";
@@ -19,6 +20,7 @@ function App() {
   const [croppedBlob, setCroppedBlob] = useState(null);
 
   const [lightboxDrawing, setLightboxDrawing] = useState(null);
+  const [uploadContext, setUploadContext] = useState(null);
   const [drawingToDelete, setDrawingToDelete] = useState(null);
   const [drawingToEdit, setDrawingToEdit] = useState(null);
   const [artistToDelete, setArtistToDelete] = useState(null);
@@ -44,7 +46,8 @@ function App() {
       });
   }, []);
 
-  const handleFileSelect = (file) => {
+  const handleFileSelect = (file, context = null) => {
+    setUploadContext(context);
     setImageSrc(URL.createObjectURL(file));
     setCroppedPreview("");
     setCroppedBlob(null);
@@ -91,12 +94,14 @@ function App() {
     } finally {
       setCroppedBlob(null);
       setCroppedPreview("");
+      setUploadContext(null);
     }
   }
 
   function handleCancelDetails() {
     setCroppedBlob(null);
     setCroppedPreview("");
+    setUploadContext(null);
   }
 
   async function handleSaveEdit(fields, imageBlob) {
@@ -216,6 +221,8 @@ function App() {
           artists={artists}
           onCancel={handleCancelDetails}
           onSubmit={handleSubmitDetails}
+          defaultArtistId={uploadContext?.artistId}
+          defaultDate={uploadContext?.date}
         />
       )}
 
@@ -328,7 +335,7 @@ function App() {
                           </div>
                         </article>
                       ) : (
-                        <div className="mobile-empty-cell" />
+                        <CellUploadCard onFileSelect={(file) => handleFileSelect(file, { artistId: artist.id, date })} />
                       )}
                     </div>
                   );
@@ -368,6 +375,9 @@ function App() {
                     );
                     return (
                       <div key={artist.id} className="timeline-cell">
+                        {cellDrawings.length === 0 && (
+                          <CellUploadCard onFileSelect={(file) => handleFileSelect(file, { artistId: artist.id, date })} />
+                        )}
                         {cellDrawings.map((drawing) => (
                           <article key={drawing.id} className="drawing-card">
                             {drawing.image_url && (

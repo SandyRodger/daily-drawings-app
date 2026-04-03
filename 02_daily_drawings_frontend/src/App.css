@@ -420,6 +420,33 @@ h1 {
   color: white;
 }
 
+.cell-upload-card {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 2px dashed #d4cdc6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #bbb;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  box-sizing: border-box;
+}
+
+.cell-upload-card:hover,
+.cell-upload-card--drag {
+  border-color: #888;
+  background: #f0ece6;
+  color: #555;
+}
+
+.cell-upload-plus {
+  font-size: 2rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
 .drawing-image--zoomable {
   cursor: zoom-in;
 }
@@ -512,10 +539,11 @@ h1 {
     scroll-snap-align: start;
   }
 
-  .mobile-empty-cell {
-    width: 100%;
-    aspect-ratio: 1;
+  .mobile-grid-cell .cell-upload-card {
+    border-radius: 0;
+    border: none;
     background: #f0ece6;
+    color: #aaa;
   }
 
   .mobile-grid-cell .drawing-card {
