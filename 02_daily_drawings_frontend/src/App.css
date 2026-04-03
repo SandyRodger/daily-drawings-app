@@ -6,7 +6,7 @@ body {
 }
 
 .app {
-  max-width: 1100px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -28,6 +28,75 @@ h1 {
   gap: 1.5rem;
   max-width: 420px;
   margin: 0 auto;
+}
+
+.artists-bar {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0 1rem;
+}
+
+.add-artist-button {
+  background: none;
+  border: 2px dashed #c9c1b6;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.add-artist-button:hover {
+  background: #ede8e2;
+  border-color: #aaa;
+}
+
+.new-artist-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.new-artist-form input {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.columns-container {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  overflow-x: auto;
+  padding-bottom: 2rem;
+}
+
+.artist-column {
+  flex: 0 0 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.artist-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e0d9d1;
+  padding-bottom: 0.5rem;
+}
+
+.artist-column-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.empty-column {
+  color: #aaa;
+  font-style: italic;
+  font-size: 0.9rem;
 }
 
 .drawing-card {
@@ -259,6 +328,7 @@ h1 {
   color: #444;
 }
 
+.edit-modal select,
 .edit-modal input,
 .edit-modal textarea {
   border: 1px solid #ddd;

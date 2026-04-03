@@ -10,6 +10,7 @@ import { getCroppedImg } from "./utils/cropImage";
 
 function App() {
   const [drawings, setDrawings] = useState([]);
+  const [artists, setArtists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -19,17 +20,19 @@ function App() {
 
   const [drawingToDelete, setDrawingToDelete] = useState(null);
   const [drawingToEdit, setDrawingToEdit] = useState(null);
+  const [artistToDelete, setArtistToDelete] = useState(null);
+
+  const [newArtistName, setNewArtistName] = useState("");
+  const [showNewArtistInput, setShowNewArtistInput] = useState(false);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/drawings`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("failed to fetch drawings");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setDrawings(data);
+    Promise.all([
+      fetch(`${API_URL}/api/drawings`).then((r) => { if (!r.ok) throw new Error("Failed to fetch drawings"); return r.json(); }),
+      fetch(`${API_URL}/api/artists`).then((r) => { if (!r.ok) throw new Error("Failed to fetch artists"); return r.json(); }),
+    ])
+      .then(([drawingsData, artistsData]) => {
+        setDrawings(drawingsData);
+        setArtists(artistsData);
         setLoading(false);
       })
       .catch((err) => {
@@ -61,13 +64,14 @@ function App() {
     setImageSrc("");
   };
 
-  async function handleSubmitDetails({ title, caption, date, notes }) {
+  async function handleSubmitDetails({ title, caption, date, notes, artist_id }) {
     try {
       const formData = new FormData();
       formData.append("title", title);
       formData.append("caption", caption);
       formData.append("date", date);
       formData.append("notes", notes);
+      formData.append("artist_id", artist_id);
       formData.append("image", croppedBlob, "cropped-drawing.jpg");
 
       const response = await fetch(`${API_URL}/api/drawings`, {
@@ -123,6 +127,41 @@ function App() {
     }
   }
 
+  async function handleAddArtist(e) {
+    e.preventDefault();
+    if (!newArtistName.trim()) return;
+    try {
+      const response = await fetch(`${API_URL}/api/artists`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newArtistName.trim() }),
+      });
+      if (!response.ok) throw new Error("Failed to create artist");
+      const artist = await response.json();
+      setArtists((prev) => [...prev, artist]);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setNewArtistName("");
+      setShowNewArtistInput(false);
+    }
+  }
+
+  async function handleConfirmDeleteArtist() {
+    try {
+      const response = await fetch(`${API_URL}/api/artists/${artistToDelete.id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Failed to delete artist");
+      setArtists((prev) => prev.filter((a) => a.id !== artistToDelete.id));
+      setDrawings((prev) => prev.filter((d) => d.artist_id !== artistToDelete.id));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setArtistToDelete(null);
+    }
+  }
+
   if (loading) return <p>Loading drawings...</p>;
   if (error) return <p>Error: {error}</p>
 
@@ -141,6 +180,7 @@ function App() {
       {croppedPreview && (
         <UploadDetailsModal
           previewUrl={croppedPreview}
+          artists={artists}
           onCancel={handleCancelDetails}
           onSubmit={handleSubmitDetails}
         />
@@ -160,18 +200,10 @@ function App() {
             <h2>Delete this drawing?</h2>
             <p>"{drawingToDelete.title}" will be permanently removed.</p>
             <div className="modal-actions">
-              <button
-                type="button"
-                className="secondary-button"
-                onClick={() => setDrawingToDelete(null)}
-              >
+              <button type="button" className="secondary-button" onClick={() => setDrawingToDelete(null)}>
                 Cancel
               </button>
-              <button
-                type="button"
-                className="danger-button"
-                onClick={handleConfirmDelete}
-              >
+              <button type="button" className="danger-button" onClick={handleConfirmDelete}>
                 Yes, delete
               </button>
             </div>
@@ -179,45 +211,104 @@ function App() {
         </div>
       )}
 
-      { drawings.length === 0 ? (
-        <p>No drawings yet.</p>
+      {artistToDelete && (
+        <div className="modal-overlay">
+          <div className="confirm-modal">
+            <h2>Delete this column?</h2>
+            <p>"{artistToDelete.name}" and all their drawings will be permanently removed.</p>
+            <div className="modal-actions">
+              <button type="button" className="secondary-button" onClick={() => setArtistToDelete(null)}>
+                Cancel
+              </button>
+              <button type="button" className="danger-button" onClick={handleConfirmDeleteArtist}>
+                Yes, delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="artists-bar">
+        {showNewArtistInput ? (
+          <form className="new-artist-form" onSubmit={handleAddArtist}>
+            <input
+              type="text"
+              value={newArtistName}
+              onChange={(e) => setNewArtistName(e.target.value)}
+              placeholder="Artist name"
+              autoFocus
+            />
+            <button type="submit" className="primary-button">Add</button>
+            <button type="button" className="secondary-button" onClick={() => setShowNewArtistInput(false)}>Cancel</button>
+          </form>
+        ) : (
+          <button className="add-artist-button" onClick={() => setShowNewArtistInput(true)}>
+            + Add Artist Column
+          </button>
+        )}
+      </div>
+
+      {artists.length === 0 ? (
+        <p>No artist columns yet. Add one above to get started.</p>
       ) : (
-        <section className="drawings-grid">
-          {drawings.map((drawing) => (
-            <article key={drawing.id} className="drawing-card">
-              {drawing.image_url && (
-                <img
-                  src={drawing.image_url}
-                  alt={drawing.title}
-                  className="drawing-image"
-                />
-              )}
-              <div className="drawing-content">
-                <h2>{drawing.title}</h2>
-                <p>{drawing.caption}</p>
-                <small>{drawing.date}</small>
-                <div className="card-actions">
-                  <button
-                    type="button"
-                    className="edit-button"
-                    onClick={() => setDrawingToEdit(drawing)}
-                  >
-                    Edit
-                  </button>
+        <div className="columns-container">
+          {artists.map((artist) => {
+            const artistDrawings = drawings.filter((d) => d.artist_id === artist.id);
+            return (
+              <div key={artist.id} className="artist-column">
+                <div className="artist-column-header">
+                  <h2>{artist.name}</h2>
                   <button
                     type="button"
                     className="delete-button"
-                    onClick={() => setDrawingToDelete(drawing)}
+                    onClick={() => setArtistToDelete(artist)}
                   >
-                    Delete
+                    Delete column
                   </button>
                 </div>
+
+                {artistDrawings.length === 0 ? (
+                  <p className="empty-column">No drawings yet.</p>
+                ) : (
+                  artistDrawings.map((drawing) => (
+                    <article key={drawing.id} className="drawing-card">
+                      {drawing.image_url && (
+                        <img
+                          src={drawing.image_url}
+                          alt={drawing.title}
+                          className="drawing-image"
+                        />
+                      )}
+                      <div className="drawing-content">
+                        <h2>{drawing.title}</h2>
+                        <p>{drawing.caption}</p>
+                        <small>{drawing.date}</small>
+                        <div className="card-actions">
+                          <button
+                            type="button"
+                            className="edit-button"
+                            onClick={() => setDrawingToEdit(drawing)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            className="delete-button"
+                            onClick={() => setDrawingToDelete(drawing)}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </article>
+                  ))
+                )}
               </div>
-          </article>
-          ))}
-          </section>
-        )}
-      </main>
+            );
+          })}
+        </div>
+      )}
+    </main>
   );
 }
 

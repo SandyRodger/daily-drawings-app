@@ -41,17 +41,18 @@ class Api::DrawingsController < ApplicationController
   private
 
   def drawing_params
-    params.permit(:title, :date, :caption, :notes, :image)
+    params.permit(:title, :date, :caption, :notes, :image, :artist_id)
   end
 
-  def drawing_json(drawing) 
+  def drawing_json(drawing)
     {
       id: drawing.id,
       title: drawing.title,
       date: drawing.date,
       caption: drawing.caption,
       notes: drawing.notes,
-      image_url: drawing.image.attached? ?url_for(drawing.image) : drawing.image_url
+      artist_id: drawing.artist_id,
+      image_url: drawing.image.attached? ? url_for(drawing.image) : drawing.image_url
     }
   end
 end

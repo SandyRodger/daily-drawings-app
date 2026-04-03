@@ -1,14 +1,15 @@
 import { useState } from "react";
 
-function UploadDetailsModal({ previewUrl, onCancel, onSubmit }) {
+function UploadDetailsModal({ previewUrl, artists, onCancel, onSubmit }) {
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [notes, setNotes] = useState("");
+  const [artistId, setArtistId] = useState(artists[0]?.id ?? "");
 
   function handleSubmit(e) {
     e.preventDefault();
-    onSubmit({ title, caption, date, notes });
+    onSubmit({ title, caption, date, notes, artist_id: artistId });
   }
 
   return (
@@ -17,6 +18,15 @@ function UploadDetailsModal({ previewUrl, onCancel, onSubmit }) {
         <h2>Add drawing details</h2>
         <img src={previewUrl} alt="Cropped preview" className="upload-preview" />
         <form onSubmit={handleSubmit}>
+          <label>
+            Artist
+            <select value={artistId} onChange={(e) => setArtistId(e.target.value)} required>
+              <option value="" disabled>Select an artist</option>
+              {artists.map((a) => (
+                <option key={a.id} value={a.id}>{a.name}</option>
+              ))}
+            </select>
+          </label>
           <label>
             Title
             <input
