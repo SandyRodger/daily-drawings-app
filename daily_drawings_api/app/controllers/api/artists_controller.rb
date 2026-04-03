@@ -1,6 +1,6 @@
 class Api::ArtistsController < ApplicationController
   def index
-    render json: Artist.order(:name).map { |a| { id: a.id, name: a.name } }
+    render json: Artist.order(:created_at).map { |a| { id: a.id, name: a.name } }
   end
 
   def create
