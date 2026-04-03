@@ -1,0 +1,303 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f1eb;
+  color: #222;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.intro {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.drawings-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.drawing-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.drawing-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.drawing-content {
+  padding: 1rem;
+}
+
+.drawing-content h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.drawing-content p {
+  color: #888;
+}
+.drawing-content small {
+  color: #888;
+}
+
+.upload-card {
+  max-width: 520px;
+  margin: 0 auto 2rem;
+  padding: 2rem;
+  background: white;
+  border: 2px dashed #c9c1b6;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.upload-card h2 {
+  margin-top: 0;
+}
+
+.upload-divider {
+  color: #888;
+  margin: 1rem 0;
+}
+
+.upload-button,
+.primary-button,
+.secondary-button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.upload-button,
+.primary-button {
+  background: #222;
+  color: white;
+}
+
+.secondary-button {
+  background: #ddd;
+  color: #222;
+}
+
+.preview-card {
+  max-width: 520px;
+  margin: 0 auto 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.preview-card h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.preview-note {
+  text-align: center;
+  color: #666;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  width: min(90vw, 700px);
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.cropper-wrapper {
+  position: relative;
+  width: 100%;
+  background: #222;
+}
+
+.crop-controls {
+  margin-top: 1rem;
+}
+
+.crop-controls label {
+  display: block;
+}
+
+.crop-controls input {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.freeform-cropper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 70vh;
+  overflow: auto;
+  background: #222;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.freeform-cropper .ReactCrop {
+  max-height: 65vh;
+}
+
+.crop-source-image {
+  max-width: 100%;
+  max-height: 65vh;
+  width: auto;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.modal-card {
+  width: min(92vw, 900px);
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.edit-button,
+.delete-button {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.edit-button {
+  color: #333;
+}
+
+.edit-button:hover {
+  background: #f5f5f5;
+  border-color: #aaa;
+}
+
+.delete-button {
+  color: #c0392b;
+}
+
+.delete-button:hover {
+  background: #fff0ef;
+  border-color: #c0392b;
+}
+
+.edit-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: min(90vw, 480px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.edit-modal h2 {
+  margin-top: 0;
+}
+
+.upload-preview {
+  width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  background: #f0ece6;
+}
+
+.edit-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.edit-modal input,
+.edit-modal textarea {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-modal input:focus,
+.edit-modal textarea:focus {
+  outline: none;
+  border-color: #aaa;
+}
+
+.confirm-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: min(90vw, 420px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.confirm-modal h2 {
+  margin-top: 0;
+}
+
+.confirm-modal p {
+  color: #555;
+}
+
+.danger-button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  cursor: pointer;
+  font-size: 1rem;
+  background: #c0392b;
+  color: white;
+}

@@ -1,0 +1,104 @@
+.upload-card {
+  max-width: 520px;
+  margin: 0 auto 2rem;
+  padding: 2rem;
+  background: white;
+  border: 2px dashed #c9c1b6;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.upload-card h2 {
+  margin-top: 0;
+}
+
+.upload-divider {
+  color: #888;
+  margin: 1rem 0;
+}
+
+.upload-button,
+.primary-button,
+.secondary-button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.upload-button,
+.primary-button {
+  background: #222;
+  color: white;
+}
+
+.secondary-button {
+  background: #ddd;
+  color: #222;
+}
+
+.preview-card {
+  max-width: 520px;
+  margin: 0 auto 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.preview-card h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.preview-note {
+  text-align: center;
+  color: #666;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  width: min(90vw, 700px);
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.cropper-wrapper {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  background: #222;
+}
+
+.crop-controls {
+  margin-top: 1rem;
+}
+
+.crop-controls label {
+  display: block;
+}
+
+.crop-controls input {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}

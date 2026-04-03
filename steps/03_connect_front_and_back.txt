@@ -1,0 +1,23 @@
+1. put a test endpoint in the Rails API. 
+In config/routes.rb put in the following:
+
+```
+Rails.application.routes.draw do
+  get "/api/health", to: "health#show"
+end
+```
+
+
+2.  Create a controller for the health pathway
+
+```app/controllers/health_controller.rb
+class HealthController < ApplicationController
+  def show
+    render json: { status: "ok" }
+  end
+end
+```
+
+3. then check it in the browser
+
+http://localhost:3000/api/health

@@ -1,0 +1,100 @@
+1. add ActiveStorage to the Rails app
+
+bin/rails active_storage:install
+bin/rails db:migrate
+
+2. allow an image to be attached to the drawing model
+
+```app/models/drawing.rb
+class Drawing < ApplicationRecord
+  has_one_attached :image
+end
+```
+
+3. Make Rails able to generate file URLs
+
+```config/environements/development
+config.active_storage.default_url_options = { host: "localhost", port: 3000 }
+```
+
+4. Update teh controller to accept the loaded file:
+
+```
+class Api::DrawingsController < ApplicationController
+  include Rails.application.routes.url_helpers
+
+  def index
+    drawings = Drawing.order(created_at: :desc)
+
+    render json: drawings.map { |drawing| drawing_json(drawing) }
+  end
+
+  def show
+    drawing = Drawing.find(params[:id])
+    render json: drawing_json(drawing)
+  end
+
+  def create
+    drawing = Drawing.new(drawing_params)
+
+    if drawing.save
+      render json: drawing_json(drawing), status: :created
+    else
+      render json: { errors: drawing.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def drawing_params
+    params.permit(:title, :date, :caption, :notes, :image)
+  end
+
+  def drawing_json(drawing)
+    {
+      id: drawing.id,
+      title: drawing.title,
+      date: drawing.date,
+      caption: drawing.caption,
+      notes: drawing.notes,
+      image_url: drawing.image.attached? ? url_for(drawing.image) : drawing.image_url
+    }
+  end
+end
+```
+
+5. send the cropped blob from React with FormData
+
+```App.jsx
+async function handleConfirmCrop(pixelCrop) {
+  if (!imageSrc || !pixelCrop) return;
+
+  try {
+    const result = await getCroppedImg(imageSrc, pixelCrop);
+    setCroppedBlob(result.blob);
+    setCroppedPreview(result.previewUrl);
+
+    const formData = new FormData();
+    formData.append("title", "New drawing");
+    formData.append("caption", "Uploaded from the React app");
+    formData.append("date", new Date().toISOString().slice(0, 10));
+    formData.append("image", result.blob, "cropped-drawing.jpg");
+
+    const response = await fetch("http://localhost:3000/api/drawings", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload drawing");
+    }
+
+    const newDrawing = await response.json();
+    setDrawings((prev) => [newDrawing, ...prev]);
+    setImageSrc("");
+  } catch (err) {
+    console.error(err);
+    setError(err.message);
+  }
+}
+```

@@ -1,0 +1,5 @@
+1. inside the Rails directory run these commands
+
+bin/rails db:create <- unneccessary. the db already exists
+bin/rails db:migrate <- this, it did seem to be able to do.
+bin/rails s

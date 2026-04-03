@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: Morning Sketch
+  date: 2026-03-17
+  caption: A quick sketch before breakfast
+  notes: Used charcoal pencil
+  image_url: https://example.com/drawings/one.jpg
+
+two:
+  title: Afternoon Doodle
+  date: 2026-03-16
+  caption: Doodled during a meeting
+  notes: Ballpoint pen
+  image_url: https://example.com/drawings/two.jpg

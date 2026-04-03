@@ -1,0 +1,27 @@
+Drawing.destroy_all
+
+Drawing.create!(
+  [
+    {
+      title: "Portrait of a man in profile",
+      date: "2026-03-15",
+      caption: "Quick graphite study from a reference photo.",
+      notes: "Focused on nose-to-mouth relationship and shadow shapes.",
+      image_url: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800"
+    },
+    {
+      title: "Woman looking down",
+      date: "2026-03-16",
+      caption: "Ten-minute morning sketch.",
+      notes: "Tried to simplify the hair masses and keep the jaw clean.",
+      image_url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800"
+    },
+    {
+      title: "Old man with beard",
+      date: "2026-03-17",
+      caption: "Longer tonal drawing.",
+      notes: "Wanted to push the contrast and make the eyes feel deep set.",
+      image_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800"
+    }
+  ]
+)

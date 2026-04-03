@@ -1,0 +1,23 @@
+1. in the parent directory of the rails api run the following command:
+
+`npm create vite@latest daily_drawings_frontend`
+
+cd daily_drawings_frontend
+npm install
+[ERROR: I chose vanilla. instead of React, so it made a plain javascript Vite app, rather than a react one.]
+2. start the server
+
+npm run dev
+
+3. replace the contents of `src/app` with the following:
+
+function App() {
+  return (
+    <div>
+      <h1>Daily Drawings</h1>
+      <p>My drawing archive is coming alive.</p>
+    </div>
+  );
+}
+
+export default App;

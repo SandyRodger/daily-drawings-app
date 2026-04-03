@@ -1,0 +1,103 @@
+1. Setting up the Rails API backend. It should only serve JSON, unlike a normal Rails app which would serve Views. This is because the React App will handle the front end UI.
+
+`rails new daily_drawing_api --api -d postgresql` <- is this missing an 's'? I'm going to say no.
+  - `--api` generates an API only app (so no views).
+  - `-d postgresql` means it will use Postgres database for production.
+  - this creates the whole product structure.
+
+2. Create the database.
+[ERROR: i ran this outside the `daily_drawings_api` directory]
+`rails db:create`
+
+3. Create the drawing model
+
+within `daily_drawings_api` :
+[ ERROR: i ran it on one line with the slashes, which made it generate with useless whitespaces that broke the code]
+
+WRONG --> `rails generate model Drawing \
+ title:string \
+  date:date \
+  caption:text \
+  notes:text \
+  image_url:string
+`
+
+CORRECT --> `rails g model Drawing title:string date:date caption:text notes:text image_url:string`
+
+4. Run the migration
+
+rails db:migrate
+
+5. Create the controller
+
+`rails g controller api/drawings`
+
+6. Add routes
+
+open `config/routes`
+replace contents with the following:
+
+```
+Rails.application.routes.draw do
+  namespace :api do
+    resources :drawings, only: [:index, :show, :create]
+  end
+end
+```
+
+, which corresponds to the following APIs:
+  - GET /api/drawings
+  - GET /api/drawings/:id
+  - POST /api/drawings
+
+7. Add controller actions
+
+open `app/controllers/api/drawings_controller.rb`
+
+replace contents with:
+```
+class Api::DrawingsController < ApplicationController
+  def index
+    drawings = Drawing.order(created_at: :desc)
+    render json: drawings
+  end
+
+  def show
+    drawing = Drawing.find(params[:id])
+    render json: drawing
+  end
+
+  def create
+    drawing = Drawing.create!(drawing_params)
+    render json: drawing
+  end
+
+  private
+
+  def drawing_params
+    params.require(:drawing).permit(:title, :date, :caption, :notes, :image_url)
+  end
+end
+```
+
+8. Start the server
+
+`rails server`
+
+9. Create a test file
+
+within rails console (`rails console`)
+
+```
+Drawing.create(
+  title: "test submission",
+  date: Date.today,
+  caption: "10 minute sketch",
+  notes: "Trying to impove proportions",
+  image_url: "https://placehold.co/600x400"
+)
+```
+
+`Drawing.all` should print that
+http://localhost:3000/api/drawings should also print the test record
+

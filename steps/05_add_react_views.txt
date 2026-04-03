@@ -1,0 +1,36 @@
+1. check the routes from the Rails app:
+
+`bin/rails routes`
+
+api_drawings GET  /api/drawings(.:format)                                                                           api/drawings#index
+            POST /api/drawings(.:format)                                                                           api/drawings#create
+api_drawing GET  /api/drawings/:id(.:format)                                                                       api/drawings#show
+api_health GET  /api/health(.:format)                                                                             health#show
+
+2. check the url
+
+http://localhost:3000/api/drawings
+
+3. Connect React to Rails
+
+```src/App.jsx
+
+```
+
+4. prevent future CORS blocking by adding `gem "rack-cors"` to the gemfile (it just needed uncommenting)
+
+Also uncomment in `config/initializers/cors.rb`
+
+```
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins "localhost:5173"  <- BE SURE TO PUT THIS IN, I LEFT IN EXAMPLE.COM AND CREATED A BUG
+
+    resource "*",
+      headers: :any,
+      methods: [:get, :post, :patch, :put, :delete, :options, :head]
+  end
+end
+```
+
+Then restart Rails.
