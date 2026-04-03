@@ -36,16 +36,18 @@ function EditModal({ drawing, artists, onCancel, onSave }) {
 
   const displayImage = newImagePreview || drawing.image_url;
 
+  if (imageSrc) {
+    return (
+      <CropModal
+        imageSrc={imageSrc}
+        onCancel={() => setImageSrc("")}
+        onConfirm={handleConfirmCrop}
+      />
+    );
+  }
+
   return (
     <>
-      {imageSrc && (
-        <CropModal
-          imageSrc={imageSrc}
-          onCancel={() => setImageSrc("")}
-          onConfirm={handleConfirmCrop}
-        />
-      )}
-
       <div className="modal-overlay">
         <div className="edit-modal">
           <h2>Edit drawing</h2>
