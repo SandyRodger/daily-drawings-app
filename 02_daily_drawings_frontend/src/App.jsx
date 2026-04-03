@@ -264,13 +264,6 @@ function App() {
               <div key={artist.id} className="artist-column">
                 <div className="artist-column-header">
                   <h2>{artist.name}</h2>
-                  <button
-                    type="button"
-                    className="delete-button"
-                    onClick={() => setArtistToDelete(artist)}
-                  >
-                    Delete column
-                  </button>
                 </div>
 
                 {artistDrawings.length === 0 ? (
