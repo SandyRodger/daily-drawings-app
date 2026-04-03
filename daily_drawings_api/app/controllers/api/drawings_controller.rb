@@ -1,6 +1,4 @@
 class Api::DrawingsController < ApplicationController
-  include Rails.application.routes.url_helpers
-
   def index
     drawings = Drawing.order(created_at: :desc)
 
@@ -54,7 +52,7 @@ class Api::DrawingsController < ApplicationController
       caption: drawing.caption,
       notes: drawing.notes,
       artist_id: drawing.artist_id,
-      image_url: drawing.image.attached? ? url_for(drawing.image) : drawing.image_url
+      image_url: drawing.image.attached? ? rails_blob_url(drawing.image, disposition: "inline") : drawing.image_url
     }
   end
 end
