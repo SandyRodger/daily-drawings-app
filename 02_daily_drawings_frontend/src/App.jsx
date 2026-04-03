@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css"
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -21,6 +21,8 @@ function App() {
   const [drawingToDelete, setDrawingToDelete] = useState(null);
   const [drawingToEdit, setDrawingToEdit] = useState(null);
   const [artistToDelete, setArtistToDelete] = useState(null);
+  const [mobileFeedIndex, setMobileFeedIndex] = useState(0);
+  const mobileFeedsRef = useRef(null);
 
   const [newArtistName, setNewArtistName] = useState("");
   const [showNewArtistInput, setShowNewArtistInput] = useState(false);
@@ -173,6 +175,20 @@ function App() {
     }
   }
 
+  function handleMobileScroll() {
+    const el = mobileFeedsRef.current;
+    if (!el) return;
+    const index = Math.round(el.scrollLeft / el.clientWidth);
+    setMobileFeedIndex(index);
+  }
+
+  function scrollToMobileFeed(index) {
+    const el = mobileFeedsRef.current;
+    if (!el) return;
+    el.scrollTo({ left: index * el.clientWidth, behavior: "smooth" });
+    setMobileFeedIndex(index);
+  }
+
   if (loading) return <p>Loading drawings...</p>;
 
   return (
@@ -270,6 +286,55 @@ function App() {
       ) : (() => {
         const sortedDates = [...new Set(drawings.map((d) => d.date).filter(Boolean))].sort().reverse();
         return (
+          <>
+          <div
+            className="mobile-feeds"
+            ref={mobileFeedsRef}
+            onScroll={handleMobileScroll}
+          >
+            {artists.map((artist) => {
+              const artistDrawings = drawings
+                .filter((d) => d.artist_id === artist.id)
+                .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+              return (
+                <div key={artist.id} className="mobile-feed">
+                  <h2 className="mobile-feed-title">{artist.name}</h2>
+                  {artistDrawings.length === 0 ? (
+                    <p className="empty-column">No drawings yet.</p>
+                  ) : (
+                    artistDrawings.map((drawing) => (
+                      <article key={drawing.id} className="drawing-card">
+                        {drawing.image_url && (
+                          <img src={drawing.image_url} alt={drawing.title} className="drawing-image" />
+                        )}
+                        <div className="drawing-content">
+                          <h2>{drawing.title}</h2>
+                          {drawing.date && <p className="drawing-date">{drawing.date}</p>}
+                          <p>{drawing.caption}</p>
+                          <div className="card-actions">
+                            <button type="button" className="edit-button" onClick={() => setDrawingToEdit(drawing)}>Edit</button>
+                            <button type="button" className="delete-button" onClick={() => setDrawingToDelete(drawing)}>Delete</button>
+                          </div>
+                        </div>
+                      </article>
+                    ))
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          {artists.length > 1 && (
+            <div className="mobile-dots">
+              {artists.map((_, i) => (
+                <button
+                  key={i}
+                  className={`dot${mobileFeedIndex === i ? " dot-active" : ""}`}
+                  onClick={() => scrollToMobileFeed(i)}
+                  aria-label={`Go to ${artists[i].name}`}
+                />
+              ))}
+            </div>
+          )}
           <div className="timeline">
             <div className="timeline-row timeline-header">
               <div className="date-label"></div>
@@ -328,6 +393,7 @@ function App() {
               ))
             )}
           </div>
+          </>
         );
       })()}
     </main>
