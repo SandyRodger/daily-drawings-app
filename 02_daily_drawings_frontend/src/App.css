@@ -96,7 +96,7 @@ h1 {
 }
 
 .artist-column {
-  flex: 0 0 320px;
+  flex: 0 0 480px;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -130,9 +130,8 @@ h1 {
 
 .drawing-image {
   width: 100%;
-  height: 340px;
+  height: auto;
   display: block;
-  object-fit: cover;
 }
 
 .drawing-content {
