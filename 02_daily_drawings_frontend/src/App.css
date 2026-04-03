@@ -449,11 +449,30 @@ h1 {
 
 .drawing-image--zoomable {
   cursor: zoom-in;
+  display: block;
 }
 
 .lightbox-overlay {
   cursor: zoom-out;
   background: rgba(0, 0, 0, 0.85);
+}
+
+.lightbox-close {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .lightbox-image {

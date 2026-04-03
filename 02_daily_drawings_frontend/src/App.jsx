@@ -237,11 +237,12 @@ function App() {
 
       {lightboxDrawing && (
         <div className="modal-overlay lightbox-overlay" onClick={() => setLightboxDrawing(null)}>
+          <button className="lightbox-close" onClick={() => setLightboxDrawing(null)}>✕</button>
           <img
             src={lightboxDrawing.image_url}
             alt={lightboxDrawing.title}
             className="lightbox-image"
-            onClick={(e) => e.stopPropagation()}
+            onClick={() => setLightboxDrawing(null)}
           />
         </div>
       )}
@@ -385,7 +386,7 @@ function App() {
                                 src={drawing.image_url}
                                 alt={drawing.title}
                                 className="drawing-image drawing-image--zoomable"
-                                onDoubleClick={() => setLightboxDrawing(drawing)}
+                                onClick={() => setLightboxDrawing(drawing)}
                               />
                             )}
                             <div className="drawing-content">
