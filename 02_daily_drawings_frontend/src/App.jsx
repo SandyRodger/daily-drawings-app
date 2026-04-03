@@ -267,57 +267,69 @@ function App() {
 
       {artists.length === 0 ? (
         <p>No artist columns yet. Add one above to get started.</p>
-      ) : (
-        <div className="columns-container">
-          {artists.map((artist) => {
-            const artistDrawings = drawings.filter((d) => d.artist_id === artist.id);
-            return (
-              <div key={artist.id} className="artist-column">
-                <div className="artist-column-header">
-                  <h2>{artist.name}</h2>
-                </div>
+      ) : (() => {
+        const sortedDates = [...new Set(drawings.map((d) => d.date).filter(Boolean))].sort().reverse();
+        return (
+          <div className="timeline">
+            <div className="timeline-row timeline-header">
+              <div className="date-label"></div>
+              {artists.map((a) => (
+                <div key={a.id} className="timeline-cell artist-name">{a.name}</div>
+              ))}
+            </div>
 
-                {artistDrawings.length === 0 ? (
-                  <p className="empty-column">No drawings yet.</p>
-                ) : (
-                  artistDrawings.map((drawing) => (
-                    <article key={drawing.id} className="drawing-card">
-                      {drawing.image_url && (
-                        <img
-                          src={drawing.image_url}
-                          alt={drawing.title}
-                          className="drawing-image"
-                        />
-                      )}
-                      <div className="drawing-content">
-                        <h2>{drawing.title}</h2>
-                        <p>{drawing.caption}</p>
-                        <small>{drawing.date}</small>
-                        <div className="card-actions">
-                          <button
-                            type="button"
-                            className="edit-button"
-                            onClick={() => setDrawingToEdit(drawing)}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            className="delete-button"
-                            onClick={() => setDrawingToDelete(drawing)}
-                          >
-                            Delete
-                          </button>
-                        </div>
+            {sortedDates.length === 0 ? (
+              <p className="empty-column">No drawings yet.</p>
+            ) : (
+              sortedDates.map((date) => (
+                <div key={date} className="timeline-row">
+                  <div className="date-label">{date}</div>
+                  {artists.map((artist) => {
+                    const cellDrawings = drawings.filter(
+                      (d) => d.artist_id === artist.id && d.date === date
+                    );
+                    return (
+                      <div key={artist.id} className="timeline-cell">
+                        {cellDrawings.map((drawing) => (
+                          <article key={drawing.id} className="drawing-card">
+                            {drawing.image_url && (
+                              <img
+                                src={drawing.image_url}
+                                alt={drawing.title}
+                                className="drawing-image"
+                              />
+                            )}
+                            <div className="drawing-content">
+                              <h2>{drawing.title}</h2>
+                              <p>{drawing.caption}</p>
+                              <div className="card-actions">
+                                <button
+                                  type="button"
+                                  className="edit-button"
+                                  onClick={() => setDrawingToEdit(drawing)}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  type="button"
+                                  className="delete-button"
+                                  onClick={() => setDrawingToDelete(drawing)}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
+                          </article>
+                        ))}
                       </div>
-                    </article>
-                  ))
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
+                    );
+                  })}
+                </div>
+              ))
+            )}
+          </div>
+        );
+      })()}
     </main>
   );
 }

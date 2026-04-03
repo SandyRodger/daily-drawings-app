@@ -87,32 +87,46 @@ h1 {
   font-family: inherit;
 }
 
-.columns-container {
-  display: flex;
-  gap: 1.5rem;
-  align-items: flex-start;
+.timeline {
+  width: 100%;
   overflow-x: auto;
-  padding-bottom: 2rem;
 }
 
-.artist-column {
-  flex: 0 0 480px;
+.timeline-row {
+  display: flex;
+  align-items: flex-start;
+  border-bottom: 1px solid #e8e2da;
+  padding: 1rem 0;
+  gap: 1rem;
+}
+
+.timeline-header {
+  border-bottom: 2px solid #c9c1b6;
+  padding-bottom: 0.75rem;
+  padding-top: 0;
+}
+
+.date-label {
+  width: 100px;
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  color: #888;
+  padding-top: 0.4rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline-cell {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
-.artist-column-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 2px solid #e0d9d1;
-  padding-bottom: 0.5rem;
-}
-
-.artist-column-header h2 {
-  margin: 0;
+.artist-name {
   font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
 }
 
 .empty-column {
