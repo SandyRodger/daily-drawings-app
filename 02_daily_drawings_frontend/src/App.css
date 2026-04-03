@@ -130,8 +130,9 @@ h1 {
 
 .drawing-image {
   width: 100%;
-  height: auto;
+  height: 340px;
   display: block;
+  object-fit: cover;
 }
 
 .drawing-content {
