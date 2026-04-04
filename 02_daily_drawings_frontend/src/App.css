@@ -476,8 +476,10 @@ h1 {
 }
 
 .lightbox-image {
-  width: 90vw;
-  height: 90vh;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
   object-fit: contain;
   border-radius: 4px;
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
