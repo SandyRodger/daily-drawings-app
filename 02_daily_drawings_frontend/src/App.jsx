@@ -26,7 +26,6 @@ function App() {
   const [croppedPreview, setCroppedPreview] = useState("");
   const [croppedBlob, setCroppedBlob] = useState(null);
 
-  const [lightboxDrawing, setLightboxDrawing] = useState(null);
   const [uploadContext, setUploadContext] = useState(null);
   const [drawingToDelete, setDrawingToDelete] = useState(null);
   const [drawingToEdit, setDrawingToEdit] = useState(null);
@@ -242,19 +241,7 @@ function App() {
         />
       )}
 
-      {lightboxDrawing && (
-        <div className="modal-overlay lightbox-overlay" onClick={() => setLightboxDrawing(null)}>
-          <button className="lightbox-close" onClick={() => setLightboxDrawing(null)}>✕</button>
-          <img
-            src={lightboxDrawing.image_url}
-            alt={lightboxDrawing.title}
-            className="lightbox-image"
-            onClick={() => setLightboxDrawing(null)}
-          />
-        </div>
-      )}
-
-      {drawingToDelete && (
+{drawingToDelete && (
         <div className="modal-overlay">
           <div className="confirm-modal">
             <h2>Delete this drawing?</h2>
@@ -392,8 +379,7 @@ function App() {
                               <img
                                 src={drawing.image_url}
                                 alt={drawing.title}
-                                className="drawing-image drawing-image--zoomable"
-                                onClick={() => setLightboxDrawing(drawing)}
+                                className="drawing-image"
                               />
                             )}
                             <div className="drawing-content">
